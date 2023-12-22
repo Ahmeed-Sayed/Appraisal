@@ -1,0 +1,49 @@
+{% extends 'base.html' %} {% block body %}
+<div class="container" style="padding-top: 5rem">
+  <div class="d-flex  justify-content-center shadow shadow-lg py-5">
+    <form method="post" class="w-50" id="registrationForm">
+      {% csrf_token %}
+      {%for field in form%}
+      <div class='form-group'>
+        {%if field.html_name != 'empSupervisor' and field.html_name != 'departmentManager' %}
+        <p>{{field.label_tag}}</p>
+        <p>{{field}}</p>
+      </div>
+      {%endif%}
+      {%endfor%}
+      <div id="employeeMoreFields" style="display: none">
+        <div>  
+        <p>{{ form.empSupervisor.label_tag }}</p>
+          <p>{{form.empSupervisor}}<p]>
+          </div>
+          <div> 
+            <p>{{ form.departmentManager.label_tag }}</p>
+            <p>{{ form.departmentManager }}</p>
+          </div>
+        </div>  
+    </div>
+      <p><input type="submit" name="submit" value="Register" /></p>
+    </form>
+
+ 
+
+  <script>
+    function toggleEmployeeMoreFields() {
+      var roleSelect = document.getElementById("id_role");
+      var employeeMoreFields = document.getElementById("employeeMoreFields");
+
+      if (roleSelect.value === "employee") {
+        employeeMoreFields.style.display = "block";
+      } else {
+        employeeMoreFields.style.display = "none";
+      }
+    }
+
+    var roleSelect = document.getElementById("id_role");
+    roleSelect.addEventListener("change", toggleEmployeeMoreFields);
+
+    toggleEmployeeMoreFields();
+  </script>
+
+  {% endblock %}
+</div>
