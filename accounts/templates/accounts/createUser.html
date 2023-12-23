@@ -1,49 +1,53 @@
-{% extends 'base.html' %} {% block body %}
-<div class="container" style="padding-top: 5rem">
-  <div class="d-flex  justify-content-center shadow shadow-lg py-5">
+{% extends 'base.html' %}
+{% block body %}
+<div class="container" >
+  <div class="d-flex justify-content-center shadow shadow-lg py-5">
     <form method="post" class="w-50" id="registrationForm">
-      {% csrf_token %}
-      {%for field in form%}
-      <div class='form-group'>
-        {%if field.html_name != 'empSupervisor' and field.html_name != 'departmentManager' %}
-        <p>{{field.label_tag}}</p>
-        <p>{{field}}</p>
+      {% csrf_token %} {%for field in form%} {%if field.html_name != 'empSupervisor' and field.html_name != 'departmentManager' %}
+
+      <div class="input-group input-group-lg mb-3">
+        <span class="input-group-text  fw-bold " id="basic-addon1"
+          >{{field.label_tag}}</span
+        >
+        {{field}}
       </div>
-      {%endif%}
-      {%endfor%}
+      {%endif%} {%endfor%}
       <div id="employeeMoreFields" style="display: none">
-        <div>  
-        <p>{{ form.empSupervisor.label_tag }}</p>
-          <p>{{form.empSupervisor}}<p]>
-          </div>
-          <div> 
-            <p>{{ form.departmentManager.label_tag }}</p>
-            <p>{{ form.departmentManager }}</p>
-          </div>
-        </div>  
-    </div>
-      <p><input type="submit" name="submit" value="Register" /></p>
-    </form>
+        <div class="input-group mb-3">
+          <span class="input-group-text  fw-bold  " id="basic-addon1"
+            >{{ form.empSupervisor.label_tag }}</span
+          >
+          {{form.empSupervisor}}
+        </div>
+        <div class="input-group mb-3">
+          <span class="input-group-text  fw-bold " id="basic-addon1"
+            >{{ form.departmentManager.label_tag }}</span
+          >
+          {{form.departmentManager}}
+        </div>
+      </div>
+      <div class='d-flex justify-content-end'> 
+      <button put type="submit"  class='btn btn-lg bg-dark text-light px-3 py-2' >Register</button>
+      </div></form>
 
- 
+    <script>
+      function toggleEmployeeMoreFields() {
+        var roleSelect = document.getElementById("id_role");
+        var employeeMoreFields = document.getElementById("employeeMoreFields");
 
-  <script>
-    function toggleEmployeeMoreFields() {
-      var roleSelect = document.getElementById("id_role");
-      var employeeMoreFields = document.getElementById("employeeMoreFields");
-
-      if (roleSelect.value === "employee") {
-        employeeMoreFields.style.display = "block";
-      } else {
-        employeeMoreFields.style.display = "none";
+        if (roleSelect.value === "employee") {
+          employeeMoreFields.style.display = "block";
+        } else {
+          employeeMoreFields.style.display = "none";
+        }
       }
-    }
 
-    var roleSelect = document.getElementById("id_role");
-    roleSelect.addEventListener("change", toggleEmployeeMoreFields);
+      var roleSelect = document.getElementById("id_role");
+      roleSelect.addEventListener("change", toggleEmployeeMoreFields);
 
-    toggleEmployeeMoreFields();
-  </script>
+      toggleEmployeeMoreFields();
+    </script>
 
-  {% endblock %}
+    {% endblock %}
+  </div>
 </div>

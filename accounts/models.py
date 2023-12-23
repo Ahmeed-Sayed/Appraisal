@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.core.validators import RegexValidator
 
 phoneRegex = RegexValidator(
@@ -15,10 +15,16 @@ class Department(models.Model):
         return self.name
 
 
-class UserManager(models.Manager):
+class UserManager(BaseUserManager):
     def create_user(self, **extra_fields):
         role = extra_fields.pop("role", User.Roles.employee)
         return self.create(role=role, **extra_fields)
+
+    def create_superuser(self, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+
+        return self.create_user(**extra_fields)
 
     def get_by_natural_key(self, username):
         return self.get(username=username)
@@ -85,9 +91,24 @@ class DepartmentManager(User):
         proxy = True
 
 
+class SupervisorMore(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, default=1)
+
+    departmentManager = models.ForeignKey(
+        DepartmentManager,
+        related_name="supervisorDepartmentManager",
+        on_delete=models.SET_NULL,
+        null=True,
+    )
+
+
 class Supervisor(User):
     objects = SupervisorManager()
     role = User.Roles.supervisor
+
+    @property
+    def more(self):
+        return self.employeemore
 
     class Meta:
         proxy = True
@@ -101,22 +122,10 @@ class HrEmployee(User):
         proxy = True
 
 
-class Employee(User):
-    objects = EmployeeManager()
-    role = User.Roles.employee
-
-    @property
-    def more(self):
-        return self.EmployeeMore
-
-    class Meta:
-        proxy = True
-
-
 class EmployeeMore(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="more")
+    user = models.OneToOneField(User, on_delete=models.CASCADE, default=1)
     empSupervisor = models.ForeignKey(
-        Employee, related_name="supervisor", on_delete=models.SET_NULL, null=True
+        Supervisor, related_name="supervisor", on_delete=models.SET_NULL, null=True
     )
     departmentManager = models.ForeignKey(
         DepartmentManager,
@@ -124,3 +133,15 @@ class EmployeeMore(models.Model):
         on_delete=models.SET_NULL,
         null=True,
     )
+
+
+class Employee(User):
+    objects = EmployeeManager()
+    role = User.Roles.employee
+
+    @property
+    def more(self):
+        return self.employeemore
+
+    class Meta:
+        proxy = True

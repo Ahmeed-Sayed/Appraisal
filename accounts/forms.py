@@ -26,71 +26,87 @@ def validate_password1(value):
     return result
 
 
-class EmployeeMoreForm(forms.ModelForm):
-    class Meta:
-        model = EmployeeMore
-        fields = ["empSupervisor", "departmentManager"]
-
 
 class CombinedForm(forms.Form):
     username = forms.CharField(
+        label='User Name',
         max_length=50,
         required=True,
+        label_suffix="",
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
     firstName = forms.CharField(
+        label='First Name',
         max_length=50,
         required=True,
+        label_suffix="",
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
 
     lastName = forms.CharField(
+        label='Last Name',
         max_length=50,
+        label_suffix="",
         required=True,
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
     password1 = forms.CharField(
+        label='Password',
+        label_suffix="",
+
         max_length=50,
         required=True,
         widget=forms.PasswordInput(attrs={"class": "form-control"}),
     )
     password2 = forms.CharField(
+        label='Confirm Password',
+        label_suffix="",
         max_length=50,
         required=True,
         widget=forms.PasswordInput(attrs={"class": "form-control"}),
     )
     phoneNumber = forms.CharField(
+        label='Phone Number',
+        label_suffix="",
         max_length=11,
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
 
     email = forms.EmailField(
         required=True,
+        label_suffix="",
         widget=forms.EmailInput(attrs={"class": "form-control"}),
     )
     address = forms.CharField(
+        label='Address',
+        label_suffix="",
         max_length=100,
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
     role = forms.ChoiceField(
+        label_suffix="",
         choices=(
             ("employee", "employee"),
             ("supervisor", "supervisor"),
             ("departmentManager", "departmentManager"),
             ("hrEmployee", "hrEmployee"),
         ),
-        widget=forms.Select(attrs={"class": "form-control"}),
+        widget=forms.Select(attrs={"class": "form-select form-select-lg"}),
     )
 
     empSupervisor = forms.ModelChoiceField(
+        label='Employee Supervisor',
         queryset=User.objects.filter(role=User.Roles.supervisor),
+        label_suffix="",
         required=False,
-        widget=forms.Select(attrs={"class": "form-control"}),
+        widget=forms.Select(attrs={"class": "form-select form-select-lg"}),
     )
     departmentManager = forms.ModelChoiceField(
+        label='Department Manager',
+        label_suffix="",
         queryset=User.objects.filter(role=User.Roles.departmentManager),
         required=False,
-        widget=forms.Select(attrs={"class": "form-control"}),
+        widget=forms.Select(attrs={"class": "form-select form-select-lg"}),
     )
 
     def clean_password2(self):
