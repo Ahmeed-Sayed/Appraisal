@@ -35,7 +35,7 @@ class User(AbstractUser):
 
     class Roles(models.TextChoices):
         employee = "employee", "Employee"
-        supervisor = "supervisor", "Supervisor"
+        directHead = "directHead", "DirectHead"
         departmentManager = "departmentManager", "DepartmentManager"
         hrEmployee = "hrEmployee", "HrEmployee"
 
@@ -64,9 +64,9 @@ class EmployeeManager(models.Manager):
         return super().get_queryset(*args, **kwargs).filter(role=User.Roles.employee)
 
 
-class SupervisorManager(models.Manager):
+class DirectHeadManager(models.Manager):
     def get_queryset(self, *args, **kwargs):
-        return super().get_queryset(*args, **kwargs).filter(role=User.Roles.supervisor)
+        return super().get_queryset(*args, **kwargs).filter(role=User.Roles.directHead)
 
 
 class DepartmentManagerManager(models.Manager):
@@ -91,20 +91,20 @@ class DepartmentManager(User):
         proxy = True
 
 
-class SupervisorMore(models.Model):
+class DirectHeadMore(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default=1)
 
     departmentManager = models.ForeignKey(
         DepartmentManager,
-        related_name="supervisorDepartmentManager",
+        related_name="directHeadDepartmentManager",
         on_delete=models.SET_NULL,
         null=True,
     )
 
 
-class Supervisor(User):
-    objects = SupervisorManager()
-    role = User.Roles.supervisor
+class DirectHead(User):
+    objects = DirectHeadManager()
+    role = User.Roles.directHead
 
     @property
     def more(self):
@@ -124,8 +124,8 @@ class HrEmployee(User):
 
 class EmployeeMore(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default=1)
-    empSupervisor = models.ForeignKey(
-        Supervisor, related_name="supervisor", on_delete=models.SET_NULL, null=True
+    empDirectHead = models.ForeignKey(
+        DirectHead, related_name="directHead", on_delete=models.SET_NULL, null=True
     )
     departmentManager = models.ForeignKey(
         DepartmentManager,

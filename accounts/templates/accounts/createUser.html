@@ -3,7 +3,7 @@
 <div class="container" >
   <div class="d-flex justify-content-center shadow shadow-lg py-5">
     <form method="post" class="w-50" id="registrationForm">
-      {% csrf_token %} {%for field in form%} {%if field.html_name != 'empSupervisor' and field.html_name != 'departmentManager' %}
+      {% csrf_token %} {%for field in form%} {%if field.html_name != 'empDirectHead' and field.html_name != 'department' %}
 
       <div class="input-group input-group-lg mb-3">
         <span class="input-group-text  fw-bold " id="basic-addon1"
@@ -13,22 +13,22 @@
       </div>
       {%endif%} {%endfor%}
       <div id="employeeMoreFields" style="display: none">
-        <div class="input-group mb-3">
-          <span class="input-group-text  fw-bold  " id="basic-addon1"
-            >{{ form.empSupervisor.label_tag }}</span
-          >
-          {{form.empSupervisor}}
+        <div class="input-group input-group-lg mb-3">
+          <span class="input-group-text  fw-bold " id="basic-addon1"  >{{ form.department.label_tag }}</span   >
+          {{form.department}}
         </div>
-        <div class="input-group mb-3">
-          <span class="input-group-text  fw-bold " id="basic-addon1"
-            >{{ form.departmentManager.label_tag }}</span
-          >
-          {{form.departmentManager}}
+        <div class="input-group input-group-lg mb-3">
+          <span class="input-group-text  fw-bold  " id="basic-addon1">{{ form.empDirectHead.label_tag }}</span  >
+          {{form.empDirectHead}}
         </div>
+        
       </div>
       <div class='d-flex justify-content-end'> 
       <button put type="submit"  class='btn btn-lg bg-dark text-light px-3 py-2' >Register</button>
-      </div></form>
+      </div>
+    </form>
+  </div>
+</div>
 
     <script>
       function toggleEmployeeMoreFields() {

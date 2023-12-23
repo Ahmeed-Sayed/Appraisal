@@ -2,7 +2,7 @@ from django import forms
 import re
 from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
-from .models import EmployeeMore
+from .models import EmployeeMore,Department
 
 User = get_user_model()
 
@@ -87,24 +87,25 @@ class CombinedForm(forms.Form):
         label_suffix="",
         choices=(
             ("employee", "employee"),
-            ("supervisor", "supervisor"),
+            ("directHead", "directHead"),
             ("departmentManager", "departmentManager"),
             ("hrEmployee", "hrEmployee"),
         ),
         widget=forms.Select(attrs={"class": "form-select form-select-lg"}),
     )
 
-    empSupervisor = forms.ModelChoiceField(
-        label='Employee Supervisor',
-        queryset=User.objects.filter(role=User.Roles.supervisor),
+    empDirectHead = forms.ModelChoiceField(
+        label='Employee Direct Head',
+        queryset=User.objects.filter(role=User.Roles.directHead),
         label_suffix="",
         required=False,
         widget=forms.Select(attrs={"class": "form-select form-select-lg"}),
     )
-    departmentManager = forms.ModelChoiceField(
-        label='Department Manager',
+    
+    department = forms.ModelChoiceField(
+        label='Department',
         label_suffix="",
-        queryset=User.objects.filter(role=User.Roles.departmentManager),
+        queryset=Department.objects.all(),
         required=False,
         widget=forms.Select(attrs={"class": "form-select form-select-lg"}),
     )
@@ -131,8 +132,8 @@ class CombinedForm(forms.Form):
         if self.cleaned_data["role"] == "employee":
             EmployeeMore.objects.create(
                 user=user,
-                empSupervisor=self.cleaned_data.get("empSupervisor"),
-                departmentManager=self.cleaned_data.get("departmentManager"),
+                empDirectHead=self.cleaned_data.get("empDirectHead"),
+                department=self.cleaned_data.get("department"),
             )
 
         return user
