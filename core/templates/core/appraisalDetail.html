@@ -1,0 +1,75 @@
+{%extends "base.html"%} {%block title%} Submit Appraisal {%endblock%} {%block body%}
+<div
+  class="container d-flex flex-column justify-content-center mt-5 bg-dark text-light rounded py-5"
+>
+  <section class="row text-center">
+    <span class=" rounded p-2 col-3 fs-5">
+      Group Object<span class=" my-3 fw-bold"  style="display:block;" >{{blueprint.groupObject}}</span>
+    </span>
+    <span class=" rounded p-2 col-3 fs-5">
+      Object Perspective
+      <span class=" my-3 fw-bold"  style="display:block;">{{blueprint.objectPerspective}}</span>
+    </span>
+    <span class=" rounded p-2 col-3 fs-5">
+      Target<span class=" my-3 fw-bold"  style="display:block;">{{blueprint.target}}</span>
+    </span>
+    <span class=" rounded p-2 col-3 fs-5">
+      Target Date<span class=" my-3 fw-bold"  style="display:block;">{{blueprint.targetDate}}</span>
+    </span>
+    <span class=" rounded p-2 col-3 fs-5">
+      Monitoring Frequency
+      <span class=" my-3 fw-bold"  style="display:block;">{{blueprint.monitoringFrequency}}</span>
+    </span>
+    <span class=" rounded p-2 col-3 fs-5">
+      Department Manager
+      <span class=" my-3 fw-bold"  style="display:block;"
+        >{{blueprint.employee.department.manager.user.username}}</span
+      >
+    </span>
+    
+    <span class=" rounded p-2 col-3 fs-5">
+      Direct Head
+      <span class=" my-3 fw-bold"  style="display:block;"
+        >{{blueprint.employee.more.empDirectHead.username}}</span
+      >
+    </span>
+    <span class=" rounded p-2 col-3 fs-5">
+      Status<span class=" my-3 fw-bold"  style="display:block;">{{blueprint.status}}</span>
+    </span>
+    <span class=" rounded p-2 col-3 fs-5">
+      Instances<span class=" my-3 fw-bold"  style="display:block;">{{blueprint.totalInstances}}/{{blueprint.instanceCount}}</span>
+    </span>
+    <span class=" rounded p-2 col-3 fs-5">
+      Creation Date<span class=" my-3 fw-bold"  style="display:block;">{{blueprint.creationDate}}</span>
+    </span>
+    
+  </section>
+
+  <section class="row text-center bg-light p-4 text-dark rounded">
+      {%for instance in blueprintInstances%}
+    <div class='row my-5 '>
+      <span class=" rounded p-2 col-3 fs-5">
+        Object Description:
+        <span class=" my-3 fw-bold"  style="display:block;">{{instance.objectInstance.objectDescription}}</span>
+      </span>
+
+      <span class=" rounded p-2 col-3 fs-5">
+        Actual Date:
+        <span class=" my-3 fw-bold"  style="display:block;">{{instance.objectInstance.actualDate}}</span>
+      </span>
+
+      <span class=" rounded p-2 col-3 fs-5">
+        weight:
+        <span class=" my-3 fw-bold"  style="display:block;">{{instance.objectInstance.weight}}</span>
+      </span>
+
+      <span class=" rounded p-2 col-3 fs-5">
+        KPI/Measure:
+        <span class=" my-3 fw-bold"  style="display:block;">{{instance.objectInstance.kpiMeasure}}</span>
+      </span>
+    </div>
+    <hr/>
+    {%endfor%}
+  </section>
+</div>
+{%endblock%}

@@ -1,0 +1,16 @@
+{%extends "base.html"%} {%block title%} Submit Appraisal {%endblock%}
+{%block body%}
+<div class='container d-flex justify-content-center mt-5 bg-dark text-light rounded py-5'>
+<form method="post" class='w-50' >
+    {% csrf_token %}
+{%for field in form%}
+<div class="input-group  mb-3">
+    <span class="input-group-text  fw-bold  " style="width:30%" id="basic-addon1">
+    {{field.label_tag   }}</span>
+    {{field}}
+    </div>
+    {%endfor%}
+    <button class="btn btn-primary">Submit</button>
+</form>
+</div>
+{%endblock%}

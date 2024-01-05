@@ -1,0 +1,68 @@
+{%extends "base.html"%} {%block title%} Submit Appraisal {%endblock%} {%block body%}
+<div
+  class="container d-flex flex-column justify-content-center mt-5 bg-dark text-light rounded py-5"
+>
+  <section class="row row-cols-4">
+    <p class="fw-bold bg-light text-dark rounded p-2 col me-1">
+      Group Object: <span class="fw-bold">{{blueprint.groupObject}}</span>
+    </p>
+    <p class="fw-bold bg-light text-dark rounded p-2 col me-1">
+      Object Perspective:
+      <span class="fw-bold">{{blueprint.objectPerspective}}</span>
+    </p>
+    <p class="fw-bold bg-light text-dark rounded p-2 col me-1">
+      Target: <span class="fw-bold">{{blueprint.target}}</span>
+    </p>
+    <p class="fw-bold bg-light text-dark rounded p-2 col me-1">
+      Target Date: <span class="fw-bold">{{blueprint.targetDate}}</span>
+    </p>
+    <p class="fw-bold bg-light text-dark rounded p-2 col me-1">
+      Monitoring Frequency:
+      <span class="fw-bold">{{blueprint.monitoringFrequency}}</span>
+    </p>
+    <p class="fw-bold bg-light text-dark rounded p-2 col me-1">
+      Status: <span class="fw-bold">{{blueprint.status}}</span>
+    </p>
+    <p class="fw-bold bg-light text-dark rounded p-2 col me-1">
+      Creation Date: <span class="fw-bold">{{blueprint.creationDate}}</span>
+    </p>
+    <p class="fw-bold bg-light text-dark rounded p-2 col me-1">
+      Department Manager:
+      <span class="fw-bold"
+        >{{blueprint.employee.department.manager.user.username}}</span
+      >
+    </p>
+    <p class="fw-bold bg-light text-dark rounded p-2 col me-1">
+      Department Manager:
+      <span class="fw-bold"
+        >{{blueprint.employee.department.manager.user.username}}</span
+      >
+    </p>
+    <p class="fw-bold bg-light text-dark rounded p-2 col me-1">
+      Direct Head:
+      <span class="fw-bold"
+        >{{blueprint.employee.more.empDirectHead.username}}</span
+      >
+    </p>
+  </section>
+
+  <section class="d-flex justify-content-center">
+    <form method="post" class="w-50">
+      {% csrf_token %} {%for field in appraisalInstanceForm%}
+      <div class="input-group mb-3">
+        <span
+          class="input-group-text fw-bold justify-content-center"
+          style="width: 30%"
+          id="basic-addon1"
+        >
+          {{field.label_tag }}</span
+        >
+        {{field}}
+      </div>
+      {%endfor%}
+
+      <button class="btn btn-primary">Submit</button>
+    </form>
+  </section>
+</div>
+{%endblock%}

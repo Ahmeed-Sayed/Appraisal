@@ -1,3 +1,4 @@
+from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views import View
 from django.contrib.auth import authenticate
@@ -9,6 +10,7 @@ User = get_user_model()
 from django.views.generic import TemplateView
 from django.contrib.auth.forms import UserCreationForm
 from .forms import CombinedForm
+from core.views import check_user_id_exists
 
 
 class HomeView(TemplateView):
@@ -31,7 +33,7 @@ class LoginView(View):
             if user is not None:
                 userId = get_object_or_404(User, username=user)
                 request.session["userId"] = userId.id
-                return redirect("home")
+                return redirect("appraisalList")
             else:
                 messages.error(request, "Invalid username or password")
                 return render(request, "accounts/login.html", status=402)
@@ -49,10 +51,12 @@ def logoutUser(request):
 
 
 class CreateUser(View):
+    @method_decorator(check_user_id_exists)
     def get(self, request):
         form = CombinedForm()
         return render(request, "accounts/createUser.html", {"form": form})
 
+    @method_decorator(check_user_id_exists)
     def post(self, request):
         form = CombinedForm(request.POST)
         if form.is_valid():
@@ -62,3 +66,28 @@ class CreateUser(View):
         else:
             messages.error(request, "User creation failed")
             return render(request, "accounts/createUser.html", {"form": form})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## blueprint objectiveperspective, objective description, target date, measure/kpi,monitoring frequency, weight , target
+        ## instance      evidence (files  and description ) , score , actual date
+
+
+        
