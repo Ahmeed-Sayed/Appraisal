@@ -4,6 +4,7 @@ from core.models import (
     GroupObjectiveInstance,
     ObjectivePerspectiveBlueprint,
     InstanceNotes,
+    GroupObjective,
 )
 from django.utils import timezone
 
@@ -69,7 +70,7 @@ class AppraisalBlueprintSubmitForm(forms.ModelForm):
         ]
         labels = {
             "objectivePerspective": "Objective Perspective",
-            "groubObjective": "Groub Objective",
+            "groupObjective": "Group Objective",
             "objectiveDescription": "Objective Description",
             "kpiMeasure": "KPI/Measure",
             "weight": "Weight",
@@ -87,7 +88,11 @@ class AppraisalBlueprintSubmitForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop("user")
         super(AppraisalBlueprintSubmitForm, self).__init__(*args, **kwargs)
+        self.fields["groupObjective"].queryset = GroupObjective.objects.filter(
+            department=user.department
+        )
         for field in self.fields.values():
             field.widget.attrs.update({"class": "form-control"})
         self.label_suffix = ""
@@ -106,27 +111,26 @@ class GroupObjectiveInstanceForm(forms.ModelForm):
     class Meta:
         model = GroupObjectiveInstance
         fields = [
-            'evidence',
-            'files',
+            "evidence",
+            "file",
             "actualDate",
         ]
-        labels = {
-            'evidence' : 'Evidence',
-            "actualDate" : "Actual Date",
-            "file":""
-        }
+        labels = {"evidence": "Evidence", "actualDate": "Actual Date", "file": ""}
         widgets = {
             "actualDate": forms.DateInput(
                 attrs={"class": "form-control", "type": "date"}
             ),
-            'evidence': forms.Textarea(
-                attrs={"class": "form-control", "rows": 4}
+            "evidence": forms.Textarea(attrs={"class": "form-control", "rows": 4}),
+            "file": forms.FileInput(
+                attrs={
+                    "class": "form-control",
+                }
             ),
-            'file': forms.FileInput(attrs={"class": "form-control",})
         }
 
     def __init__(self, *args, **kwargs):
         super(GroupObjectiveInstanceForm, self).__init__(*args, **kwargs)
+
         for field in self.fields.values():
             field.widget.attrs.update({"class": "form-control"})
 
@@ -152,3 +156,20 @@ class NoteForm(forms.ModelForm):
             }
         )
         self.label_suffix = ""
+
+
+class groupObjectiveSubmitForm(forms.ModelForm):
+    class Meta:
+        model = GroupObjective
+        fields = ["objectivePerspective", "name", "weight"]
+        labels = {
+            "name": "Group Objective Name",
+            "objectivePerspective": "Objective Perspective",
+            "weight": "Weight",
+        }
+        widgets = {
+            "objectivePerspective": forms.Select(attrs={"class": "form-select"}),
+            "name": forms.TextInput(attrs={"class": "form-control"}),
+            "weight": forms.TextInput(attrs={"class": "form-control"}),
+        }
+        label_suffix = ""

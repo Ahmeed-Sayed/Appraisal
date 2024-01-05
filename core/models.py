@@ -2,7 +2,7 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth import get_user_model
-from accounts.models import DepartmentManager, DirectHead, Employee
+from accounts.models import DepartmentManager, DirectHead, Employee,Department
 
 User = get_user_model()
 
@@ -31,7 +31,7 @@ class GroupObjective(models.Model):
         max_length=255, choices=Objective_PERSPECTIVE_CHOICES
     )
     weight = models.FloatField()
-
+    department=models.ForeignKey(Department,on_delete=models.CASCADE,related_name='groupObjective')
     def __str__(self):
         return self.name
 
@@ -44,9 +44,9 @@ class GroupObjectiveInstance(models.Model):
         related_name="groubObjectiveInstance",
     )
     actualDate = models.DateField()
-    evidence=models.TextField(max_length=500)
-    file=models.FileField(upload_to='/evidence')
-    
+    evidence = models.TextField(max_length=500)
+    file = models.FileField(upload_to="evidence/")
+
     directHeadReview = models.BooleanField(default=False)
     departmentManagerReview = models.BooleanField(default=False)
     hrReview = models.BooleanField(default=False)

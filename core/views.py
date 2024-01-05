@@ -3,7 +3,11 @@ from django.shortcuts import redirect, render, get_object_or_404
 from django.views import View
 from accounts.models import Employee
 from core.models import BlueprintObjectiveInstance, ObjectivePerspectiveBlueprint
-from core.forms import AppraisalBlueprintSubmitForm, GroupObjectiveInstanceForm
+from core.forms import (
+    AppraisalBlueprintSubmitForm,
+    GroupObjectiveInstanceForm,
+    groupObjectiveSubmitForm,
+)
 
 from django.contrib.auth import get_user_model
 
@@ -25,7 +29,8 @@ def check_user_id_exists(view_func):
 class AppraisalBleuprintSubmitView(View):
     @method_decorator(check_user_id_exists)
     def get(self, request, *args, **kwargs):
-        form = AppraisalBlueprintSubmitForm()
+        user = get_object_or_404(User, id=request.session.get("userId"))
+        form = AppraisalBlueprintSubmitForm(user=user)
         return render(request, "core/appraisalSubmit.html", {"form": form})
 
     @method_decorator(check_user_id_exists)
@@ -45,7 +50,7 @@ class AppraisalBleuprintSubmitView(View):
                 case "Monthly":
                     appraisal.instanceCount = 12
             appraisal.save()
-        return redirect("submitAP")
+        return redirect("submit-appraisal")
 
 
 class AppraisalInstanceSubmitView(View):
@@ -76,7 +81,7 @@ class AppraisalInstanceSubmitView(View):
             BlueprintObjectiveInstance.objects.create(
                 employee=employee, blueprint=blueprint, objectInstance=submittedInstance
             )
-        return redirect("appraisalList")
+        return redirect("appraisal-list")
 
 
 class AppraisalList(View):
@@ -92,9 +97,31 @@ class AppraisalList(View):
 def appraisalDetail(request, blueprintId):
     if request.method == "GET":
         blueprint = get_object_or_404(ObjectivePerspectiveBlueprint, id=blueprintId)
-        blueprintInstances = BlueprintObjectiveInstance.objects.filter(blueprint=blueprint)
+        blueprintInstances = BlueprintObjectiveInstance.objects.filter(
+            blueprint=blueprint
+        )
         return render(
             request,
             "core/appraisalDetail.html",
             {"blueprint": blueprint, "blueprintInstances": blueprintInstances},
         )
+
+
+class SubmitGroupObjective(View):
+    @method_decorator(check_user_id_exists)
+    def get(self, request, *args, **kwargs):
+        form = groupObjectiveSubmitForm()
+
+        return render(request, "core/groupObjectiveSubmit.html", {"form": form})
+
+    @method_decorator(check_user_id_exists)
+    def post(self, request, *args, **kwargs):
+        userId = request.session.get("userId")
+        user = get_object_or_404(User, id=userId)
+        form = groupObjectiveSubmitForm(request.POST)
+        if form.is_valid():
+            submittedForm = form.save(commit=False)
+            submittedForm.department = user.department
+            submittedForm.save()
+            return redirect("appraisal-list")
+        return render(request, "core/groupObjectiveSubmit.html", {"form": form})

@@ -124,6 +124,7 @@ class CombinedForm(forms.Form):
             last_name=self.cleaned_data["lastName"],
             phoneNumber=self.cleaned_data["phoneNumber"],
             address=self.cleaned_data["address"],
+            department=self.cleaned_data['department'],
             role=self.cleaned_data["role"],
         )
         user.set_password(self.cleaned_data["password1"])

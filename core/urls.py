@@ -3,12 +3,19 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path("submitAP/", views.AppraisalBleuprintSubmitView.as_view(), name="submitAP"),
+    path(
+        "submit-appraisal/",
+        views.AppraisalBleuprintSubmitView.as_view(),
+        name="submit-appraisal",
+    ),
     path(
         "<int:blueprintID>/submitInstance/",
         views.AppraisalInstanceSubmitView.as_view(),
-        name="submitInstance",
+        name="submit-instance",
     ),
-    path("", views.AppraisalList.as_view(), name="appraisalList"),
-    path("<blueprintId>/detail", views.appraisalDetail, name="appraisalDetail"),
+    path("", views.AppraisalList.as_view(), name="appraisal-list"),
+    path("<blueprintId>/detail", views.appraisalDetail, name="appraisal-details"),
+    path(
+        "submit-group-objective", views.SubmitGroupObjective.as_view(), name="submit-group-objective"
+    ),
 ]

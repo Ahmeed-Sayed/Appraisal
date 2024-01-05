@@ -4,11 +4,11 @@
 >
   <section class="row row-cols-4">
     <p class="fw-bold bg-light text-dark rounded p-2 col me-1">
-      Group Object: <span class="fw-bold">{{blueprint.groupObject}}</span>
+      Group Objective: <span class="fw-bold">{{blueprint.groupObjective}}</span>
     </p>
     <p class="fw-bold bg-light text-dark rounded p-2 col me-1">
-      Object Perspective:
-      <span class="fw-bold">{{blueprint.objectPerspective}}</span>
+      Objective Perspective:
+      <span class="fw-bold">{{blueprint.objectivePerspective}}</span>
     </p>
     <p class="fw-bold bg-light text-dark rounded p-2 col me-1">
       Target: <span class="fw-bold">{{blueprint.target}}</span>
@@ -21,7 +21,7 @@
       <span class="fw-bold">{{blueprint.monitoringFrequency}}</span>
     </p>
     <p class="fw-bold bg-light text-dark rounded p-2 col me-1">
-      Status: <span class="fw-bold">{{blueprint.status}}</span>
+      Status: <span class="fw-bold">{{blueprint.status|capfirst}}</span>
     </p>
     <p class="fw-bold bg-light text-dark rounded p-2 col me-1">
       Creation Date: <span class="fw-bold">{{blueprint.creationDate}}</span>
@@ -32,12 +32,7 @@
         >{{blueprint.employee.department.manager.user.username}}</span
       >
     </p>
-    <p class="fw-bold bg-light text-dark rounded p-2 col me-1">
-      Department Manager:
-      <span class="fw-bold"
-        >{{blueprint.employee.department.manager.user.username}}</span
-      >
-    </p>
+    
     <p class="fw-bold bg-light text-dark rounded p-2 col me-1">
       Direct Head:
       <span class="fw-bold"

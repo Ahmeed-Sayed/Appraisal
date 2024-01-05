@@ -33,7 +33,7 @@ class LoginView(View):
             if user is not None:
                 userId = get_object_or_404(User, username=user)
                 request.session["userId"] = userId.id
-                return redirect("appraisalList")
+                return redirect("appraisal-list")
             else:
                 messages.error(request, "Invalid username or password")
                 return render(request, "accounts/login.html", status=402)
